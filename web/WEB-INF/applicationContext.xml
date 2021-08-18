@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd 
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+    <!--bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+          p:location="/WEB-INF/jdbc.properties" -->
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+      <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+      <property name="url" value="jdbc:mysql://localhost/teste?useSSL=false"/>
+      <property name="username" value="teste"/>
+      <property name="password" value="jcrfbest40"/>
+    </bean>
+    <!-- ADD PERSISTENCE SUPPORT HERE (jpa, hibernate, etc) -->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+    <property name="dataSource" ref="dataSource" />
+    <property name="configLocation" value="/WEB-INF/Hibernate-cfg.xml"/> 
+    <property name="hibernateProperties">
+        <props>
+            <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+            <prop key="hibernate.hbm2ddl.auto">update</prop>
+            <prop key="hibernate.connection.verifyServerCertificate">false</prop>
+        </props>
+    </property>
+    </bean>  
+     
+       <bean id="hibernateTransaction" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+  		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+     
+      
+        
+   <context:component-scan base-package="br.com.jcrf"></context:component-scan>
+   <tx:annotation-driven transaction-manager="transactionManager" />
+   <context:annotation-config/>
+   <mvc:annotation-driven/>
+   <mvc:resources mapping="/resources/css/**" location="/resources/css/"/>
+   <mvc:resources mapping="/resources/js/**" location="/resources/js/"/>
+   
+   <bean
+      class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+      <property name="prefix" value="/WEB-INF/jsp/"/>
+      <property name="suffix" value=".jsp"/>
+      
+  </bean>
+  
+    <mvc:interceptors>
+        <bean  class= "br.com.jcrf.interceptor.AutorizadorInterceptor" />
+    </mvc:interceptors>
+  
+  <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+      <property name="basename" value="/WEB-INF/messages" />
+  </bean>
+  
+</beans>

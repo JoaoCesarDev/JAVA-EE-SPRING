@@ -1,0 +1,6 @@
+br.com.jcrf.controller.Errors=org.springframework.stereotype.Component
+br.com.jcrf.controller.UsuarioController=org.springframework.stereotype.Component
+br.com.jcrf.controller.loginController=org.springframework.stereotype.Component
+br.com.jcrf.dao.GenericHibernateDao=org.springframework.stereotype.Component
+br.com.jcrf.entity.Usuario=javax.persistence.Entity,javax.persistence.Table,javax.persistence.SequenceGenerator
+br.com.jcrf.teste.OlaMundoController=org.springframework.stereotype.Component
